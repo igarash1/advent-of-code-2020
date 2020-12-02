@@ -8,7 +8,7 @@ import (
 func main() {
 	// O(N)
 
-	bucket := [2021]bool{}
+	bucket := make([]bool, 2021)
 	for {
 		var expense int
 		_, err := fmt.Scan(&expense)

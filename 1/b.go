@@ -9,7 +9,7 @@ func main() {
 	// O(N^2)
 
 	var exp []int
-	bucket := [2021]bool{}
+	bucket := make([]bool, 2021)
 	for {
 		var x int
                 _, err := fmt.Scan(&x)

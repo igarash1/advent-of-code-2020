@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 )
 
 func main() {
@@ -16,7 +17,7 @@ func main() {
 		_, err := fmt.Scanf("%d-%d %c: %s", &lo, &hi, &letter, &pw)
 		
 		if err != nil {
-			fmt.Println(err)
+			log.Print(err)
 			break
 		}
 
