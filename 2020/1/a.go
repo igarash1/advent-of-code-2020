@@ -24,10 +24,9 @@ func main() {
 		if expense > 2020 {
 			continue
 		}
-		if bucket[2020 - expense] {
+		if bucket[2020-expense] {
 			fmt.Println((2020 - expense) * expense)
 		}
 		bucket[expense] = true
 	}
 }
-

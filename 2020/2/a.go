@@ -13,9 +13,9 @@ func main() {
 		var lo, hi int
 		var letter byte
 		var pw string
-		
+
 		_, err := fmt.Scanf("%d-%d %c: %s", &lo, &hi, &letter, &pw)
-		
+
 		if err != nil {
 			log.Print(err)
 			break
@@ -34,4 +34,3 @@ func main() {
 
 	fmt.Println(result)
 }
-
