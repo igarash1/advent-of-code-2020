@@ -7,14 +7,21 @@ import (
 )
 
 func getSeatID(s string) int {
-	id := 0
-	for _, c := range s {
-		id <<= 1
-		if c == 'B' || c == 'R' {
-			id += 1
-		}
+	if id, err := strconv.ParseInt(strings.Map(
+		func(r rune) rune {
+			switch {
+			case r == 'B' || r == 'R':
+				return '1'
+			case r == 'F' || r == 'L':
+				return '0'
+			}
+			return r
+		}, s), 2, 32); err != nil {
+		log.Fatal(err)
+	} else {
+		return int(id)
 	}
-	return id
+	return -1 // don't happen
 }
 
 func main() {
