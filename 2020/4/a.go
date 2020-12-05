@@ -3,23 +3,14 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"log"
+	// "log"
 	"os"
 	"strings"
 )
 
-func isValid(v []bool) bool {
-	for _, v := range v {
-		if !v {
-			return false
-		}
-	}
-	return true
-}
-
 func main() {
 	eFlds := []string{"byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"}
-	fVlds := make([]bool, len(eFlds))
+	fVlds := make(map[string]bool)
 	result := 0
 
 	scanner := bufio.NewScanner(os.Stdin)
@@ -34,27 +25,28 @@ func main() {
 				break
 			}
 			cidx := strings.Index(fld, ":")
-			if cidx > 0 && cidx < len(fld) {
-				id := fld[:cidx]
-				for i, v := range eFlds {
-					if id == v {
-						fVlds[i] = true
-						break
-					}
-				}
+			if cidx > 0 && cidx < len(fld) - 1 {
+				key := fld[:cidx]
+				// value := fld[cidx+1:]
+				fVlds[key] = true
 			}
 		}
 		isEOF := !scanner.Scan()
 		if isEOF || len(scanner.Text()) == 0 {
-			if isValid(fVlds) {
-				log.Println("valid")
+			valid := true
+			for _, k := range eFlds {
+				if !fVlds[k] {
+					valid = false
+					break
+				}
+			}
+			if valid {
+				// log.Println("valid")
 				result++
 			} else {
-				log.Println("invalid")
+				// log.Println("invalid")
 			}
-			for i, _ := range fVlds {
-				fVlds[i] = false
-			}
+			fVlds = make(map[string]bool)
 			scanner.Scan()
 		}
 

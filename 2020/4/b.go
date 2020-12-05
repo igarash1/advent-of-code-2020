@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 	"regexp"
-	"sort"
+	// "sort"
 	"strconv"
 	"strings"
 )
@@ -19,7 +19,7 @@ func toInt(s string) int {
 	return v
 }
 
-func validValue(key string, value string) bool {
+func validValueRange(key string, value string) bool {
 	kMatched, err := regexp.Match(`byr|iyr|eyr|hgt`, []byte(key))
 	if err != nil {
 		log.Fatal("regex error ", err)
@@ -72,12 +72,22 @@ func main() {
 		"hcl": `^#[0-9a-f]{6}$`,
 		"ecl": `^(amb|blu|brn|gry|grn|hzl|oth)$`,
 		"pid": `^[0-9]{9}$`}
-
-	aVlds := map[string]map[string]string{}
+	rFlds := make(map[string]*regexp.Regexp)
 	for k, _ := range eFlds {
-		aVlds[k] = make(map[string]string)
+		r, err := regexp.Compile(eFlds[k])
+		if err != nil {
+			log.Fatal("regex error ", err)
+		}
+		rFlds[k] = r
 	}
+	/*
+		aVlds := map[string]map[string]string{}
+		for k, _ := range eFlds {
+			aVlds[k] = make(map[string]string)
+		}
+	*/
 	fVlds := make(map[string]string)
+
 	result := 0
 
 	scanner := bufio.NewScanner(os.Stdin)
@@ -103,13 +113,10 @@ func main() {
 		isEOF := !scanner.Scan()
 		if isEOF || len(scanner.Text()) == 0 {
 			valid := true
-			for k, rs := range eFlds {
-				r, err := regexp.Compile(rs)
-				if err != nil {
-					log.Fatal("regex error ", err)
-				}
-				if r.MatchString(fVlds[k]) {
-					if !validValue(k, fVlds[k]) {
+
+			for k, regx := range rFlds {
+				if regx.MatchString(fVlds[k]) {
+					if !validValueRange(k, fVlds[k]) {
 						valid = false
 					}
 				} else {
@@ -117,11 +124,13 @@ func main() {
 				}
 			}
 
-			if valid {
-				for k, v := range fVlds {
-					aVlds[k][v] = v
-				}
-				log.Println("VALID ", fVlds)
+			if len(fVlds) > 0 && valid {
+				/*
+					for k, v := range fVlds {
+						aVlds[k][v] = v
+					}
+					log.Println("VALID ", fVlds)
+				*/
 				result++
 			}
 			fVlds = make(map[string]string)
@@ -133,17 +142,17 @@ func main() {
 			break
 		}
 	}
-
-	log.Print("APPEARED VALUES")
-	for k, v := range aVlds {
-		log.Print(k, ":")
-		keys := []string{}
-		for k, _ := range v {
-			keys = append(keys, k)
+	/*
+		log.Print("APPEARED VALUES")
+		for k, v := range aVlds {
+			log.Print(k, ":")
+			keys := []string{}
+			for k, _ := range v {
+				keys = append(keys, k)
+			}
+			sort.Slice(keys, func(i, j int) bool { return keys[i] < keys[j] })
+			log.Print(keys)
 		}
-		sort.Slice(keys, func(i, j int) bool { return keys[i] < keys[j] })
-		log.Print(keys)
-	}
-
+	*/
 	fmt.Println(result)
 }
