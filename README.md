@@ -1,13 +1,13 @@
 # Advent of code
 
 https://adventofcode.com/
-## 2020
+## 2020 (by Golang)
 * [x] 1
 * [x] 2
 * [x] 3
 * [x] 4
 * [x] 5
-* [ ] 6
+* [x] 6
 * [ ] 7
 * [ ] 8
 * [ ] 9
@@ -28,8 +28,8 @@ https://adventofcode.com/
 * [ ] 24
 * [ ] 25
 
-## 2019
-* [ ] 1
+## 2019 (by Scala)
+* [x] 1
 * [ ] 2
 * [ ] 3
 * [ ] 4
