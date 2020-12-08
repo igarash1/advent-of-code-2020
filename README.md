@@ -9,7 +9,7 @@ https://adventofcode.com/
 * [x] 5
 * [x] 6
 * [x] 7
-* [ ] 8
+* [x] 8
 * [ ] 9
 * [ ] 10
 * [ ] 11
