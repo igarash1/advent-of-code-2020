@@ -7,33 +7,38 @@ import (
 	"os"
 )
 
+func countOccAdj(seats []string, x, y int) int {
+	adjCnt := 0
+	for rx := -1; rx <= 1; rx++ {
+		for ry := -1; ry <= 1; ry++ {
+			if rx == 0 && ry == 0 {
+				continue
+			}
+			nx, ny := x, y
+			for {
+				nx += rx
+				ny += ry
+				if ny < 0 || ny >= len(seats) || nx < 0 || nx >= len(seats[y]) {
+					break
+				}
+				if byte(seats[ny][nx]) == '#' {
+					adjCnt++
+				}
+				if byte(seats[ny][nx]) != '.' {
+					break
+				}
+			}
+		}
+	}
+	return adjCnt
+}
+
 func move(seats []string) ([]string, bool) {
 	newSeats := make([]string, len(seats))
 	changed := false
 	for y := 0; y < len(seats); y++ {
 		for x := 0; x < len(seats[y]); x++ {
-			adjCnt := 0
-			for rx := -1; rx <= 1; rx++ {
-				for ry := -1; ry <= 1; ry++ {
-					if rx == 0 && ry == 0 {
-						continue
-					}
-					nx, ny := x, y
-					for {
-						nx += rx
-						ny += ry
-						if ny < 0 || ny >= len(seats) || nx < 0 || nx >= len(seats[y]) {
-							break
-						}
-						if byte(seats[ny][nx]) == '#' {
-							adjCnt++
-						}
-						if byte(seats[ny][nx]) != '.' {
-							break
-						}
-					}
-				}
-			}
+			adjCnt := countOccAdj(seats, x, y)
 			if byte(seats[y][x]) == 'L' && adjCnt == 0 {
 				newSeats[y] += "#"
 				changed = true
