@@ -36,24 +36,16 @@ func main() {
 		ists = append(ists, scanner.Text())
 	}
 
+	di := map[byte]int{'E': 0, 'N': 1, 'W': 2, 'S': 3}
 	dx := []int{1, 0, -1, 0}
 	dy := []int{0, 1, 0, -1}
 	wx, wy, wd := 10, 1, 0
 	x, y := 0, 0
 	for _, ist := range ists {
 		switch com, num := getInstruction(ist); com {
-		case 'E':
-			wx += dx[0] * num
-			wy += dy[0] * num
-		case 'N':
-			wx += dx[1] * num
-			wy += dy[1] * num
-		case 'W':
-			wx += dx[2] * num
-			wy += dy[2] * num
-		case 'S':
-			wx += dx[3] * num
-			wy += dy[3] * num
+		case 'E', 'N', 'W', 'S':
+			wx += dx[di[com]] * num
+			wy += dy[di[com]] * num
 		case 'L':
 			wd += num / 90
 			wd %= 4
