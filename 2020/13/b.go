@@ -18,47 +18,31 @@ func toInt(s string) int {
 	}
 }
 
-func mod_inverse(x, m int) int{
+/*
+* mode_inverse(x, m):
+* compute the inverse a of x mod m,
+* solving ax+my=1 by extended-gcd.
+ */
+func mod_inverse(x, m int) int {
 	if m == 1 {
 		return 0
 	}
 
-	m0 := m
+	M := m
 	x0, x1 := 0, 1
 	for x > 1 {
 		q := x / m
-		t := m
-		m, x = x % m, t
-		t = x0
-		x0 = x1 - q * x0;
-		x1 = t;
+		m, x = x%m, m
+		x0, x1 = x1-q*x0, x0
 	}
 
-	if x1 < 0 {
-		x1 += m0;
-	}
-
-	return x1;
-}
-
-func gcd(a, b int) int {
-	if b < a {
-		return gcd(b, a)
-	}
-	if a == 0 {
-		return b
-	}
-	return gcd(b % a, a)
-}
-
-func lcm(a, b int) int {
-	return a / gcd(a, b) * b
+	return (x1 + M) % M
 }
 
 func main() {
 	var ts int
 	busRem := []int{}
-	busIds := []int{}
+	busIDs := []int{}
 
 	fmt.Scan(&ts)
 
@@ -69,23 +53,39 @@ func main() {
 	for i, s := range input {
 		if s != "x" {
 			bid := toInt(s)
-			busRem = append(busRem, (bid - (i % bid)) % bid)
-			busIds = append(busIds, bid)
+			busRem = append(busRem, (bid-(i%bid))%bid)
+			busIDs = append(busIDs, bid)
 		}
 	}
 
-	P, LCM := 1, 1
-	for _, b := range busIds {
+	// we assume bus IDs are coprime.
+	P := 1
+	for _, b := range busIDs {
 		P *= b
-		LCM = lcm(LCM, b)
 	}
 
+	/*
+	* we have to find the solution x s.t.
+	* 	busRem[i] = result (mod busIDs[i]) for all i.
+	* By Chinese Remainder Theorem, we know there is a unique solution in
+	* mod LCM(busIDs) and it is smallest.
+	* so we just only have to find a solution and take mod.
+	* let's define P[i] and P[i] ^ -1:
+	* 	 P[i] := LCM(busIDs) / busIDs[i],
+	* 	 P[i]^-1 := the inverse of P[i] under the modulo busIDs[i].
+	*  note that P[i] and busIDs[i] are coprime. and then,
+	* 	busRem[0] * P[0]^-1 * P[0] + ... + busRem[n-1] * P[n-1]^-1 * P[n-1],
+	* where
+	* is one solution satysfing the mod equations since
+	* 	busRem[j] * P[j]^-1 * P[j] = 0 (mod P[i]) (for all j st. i !=
+	* 	j).
+	* note that P[j] is a mutiple of P[i].
+	 */
 	result := 0
-	for i, bid := range busIds {
-		pp := LCM / bid
-		result += busRem[i] * mod_inverse(pp, bid) * pp
+	for i, id := range busIDs {
+		pi := P / id
+		result += busRem[i] * mod_inverse(pi, id) * pi
 	}
 
-	fmt.Println(result % LCM)
+	fmt.Println(result % P)
 }
-
