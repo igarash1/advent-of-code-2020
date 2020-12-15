@@ -20,8 +20,8 @@ func main() {
 		prev[num] = turn
 		turn++
 	}
-	
-	for ;turn <= 2020;turn++ {
+
+	for ; turn <= 2020; turn++ {
 		var next int
 		if _, ok := prev[last]; ok {
 			next = turn - prev[last] - 1

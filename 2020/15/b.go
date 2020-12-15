@@ -23,7 +23,7 @@ func main() {
 		turn++
 	}
 
-	for ;turn <= TURN;turn++ {
+	for ; turn <= TURN; turn++ {
 		var next int
 		if prev[last] > 0 {
 			next = turn - prev[last] - 1
