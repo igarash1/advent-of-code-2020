@@ -54,10 +54,9 @@ func main() {
 	if scanner.Text() != "your ticket:" {
 		log.Fatal("expected 'your ticket:', but ", scanner.Text())
 	}
-
 	scanner.Scan()
-	yourTickets := splitToInts(scanner.Text())
-	result := computeErrors(yourTickets, ivls)
+	// ignore your ticket for now
+	splitToInts(scanner.Text())
 
 	// scan nearby tickets
 	scanner.Scan()
@@ -66,6 +65,8 @@ func main() {
 		log.Fatal("expected 'nearby tickets:', but ", scanner.Text())
 	}
 
+	// compute errors
+	result := 0
 	for scanner.Scan() {
 		nearbyTicket := splitToInts(scanner.Text())
 		result += computeErrors(nearbyTicket, ivls)

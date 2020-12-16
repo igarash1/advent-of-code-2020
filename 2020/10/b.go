@@ -20,7 +20,7 @@ func main() {
 	dp := make(map[int]int)
 	dp[0] = 1
 	for _, a := range adpts {
-		dp[a] = dp[a-1]+dp[a-2]+dp[a-3]
+		dp[a] = dp[a-1] + dp[a-2] + dp[a-3]
 	}
 	fmt.Println(dp[adpts[len(adpts)-1]])
 }
