@@ -20,7 +20,7 @@ func main() {
 			for _, c := range line {
 				ans[byte(c)] = true
 			}
-			for k, _ := range ans {
+			for k := range ans {
 				tot[k]++
 			}
 			scanner.Scan()

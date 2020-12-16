@@ -64,7 +64,7 @@ func main() {
 		"pid": `^[0-9]{9}$`}
 
 	rFlds := make(map[string]*regexp.Regexp)
-	for k, _ := range eFlds {
+	for k := range eFlds {
 		r, err := regexp.Compile(eFlds[k])
 		if err != nil {
 			log.Fatal("regex error ", err)

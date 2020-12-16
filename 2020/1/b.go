@@ -26,7 +26,7 @@ func main() {
 		bucket[x] = true
 	}
 
-	for i, _ := range exp {
+	for i := range exp {
 		for j := i + 1; j < len(exp); j++ {
 			if exp[i]+exp[j] > 2020 {
 				continue

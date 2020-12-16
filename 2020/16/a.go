@@ -79,9 +79,8 @@ func toInt(s string) int {
 	if i, err := strconv.Atoi(s); err != nil {
 		log.Fatal(err)
 		return -1
-	} else {
-		return i
 	}
+	return i
 }
 
 func splitToInts(fields string) []int {

@@ -70,7 +70,7 @@ func main() {
 		}
 	}
 
-	for i, _ := range ops {
+	for i := range ops {
 		if ops[i] == "acc" {
 			continue
 		}

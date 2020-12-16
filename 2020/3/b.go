@@ -21,7 +21,7 @@ func main() {
 	stepX := []int{1, 3, 5, 7, 1}
 	stepY := []int{1, 1, 1, 1, 2}
 	result := 1
-	for i, _ := range stepX {
+	for i := range stepX {
 		cnt := 0
 		x := 0
 		for y := 0; y < len(Map); y += stepY[i] {

@@ -58,7 +58,7 @@ func main() {
 
 	scanner.Scan()
 	yourTickets := splitToInts(scanner.Text())
-	validYourTickets := getValidTickets(yourTickets, ivlsMap)
+	validYTs := getValidTickets(yourTickets, ivlsMap)
 
 	// scan nearby tickets
 	scanner.Scan()
@@ -76,7 +76,7 @@ func main() {
 	// enumerate possible indices for each field
 	// (that corresponds to making a bipartite graph)
 	possibleIdx := make(map[string][]int)
-	for i, yt := range validYourTickets {
+	for i, yt := range validYTs {
 		for fName, ivls := range ivlsMap {
 			if !isValidTicket(yt, ivls) {
 				continue
@@ -130,9 +130,8 @@ func toInt(s string) int {
 	if i, err := strconv.Atoi(s); err != nil {
 		log.Fatal(err)
 		return -1
-	} else {
-		return i
 	}
+	return i
 }
 
 func splitToInts(fields string) []int {

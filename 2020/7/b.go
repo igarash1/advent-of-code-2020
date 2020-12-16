@@ -58,7 +58,7 @@ func main() {
 		}
 	}
 
-	que := []Node{Node{1, "shiny gold"}}
+	que := []Node{{1, "shiny gold"}}
 	result := 0
 	for len(que) > 0 {
 		u := que[0]
