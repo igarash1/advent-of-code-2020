@@ -74,7 +74,8 @@ func main() {
 	}
 
 	// enumerate possible indices for each field
-	fieldIdx := make(map[string][]int)
+	// (that corresponds to making a bipartite graph)
+	possibleIdx := make(map[string][]int)
 	for i, yt := range validYourTickets {
 		for fName, ivls := range ivlsMap {
 			if !isValidTicket(yt, ivls) {
@@ -88,20 +89,21 @@ func main() {
 			}
 			if possible {
 				log.Printf("the field of %d-th index can be %s", i, fName)
-				fieldIdx[fName] = append(fieldIdx[fName], i)
+				possibleIdx[fName] = append(possibleIdx[fName], i)
 			}
 		}
 	}
 
 	// determine which field is which
-	dFieldIdx := make(map[string]int)
-	for len(dFieldIdx) < len(ivlsMap) {
+	// (that corresponds to determine a perfect matching in a bipartite graph)
+	fieldIdx := make(map[string]int)
+	for len(fieldIdx) < len(ivlsMap) {
 		dIdx := -1
-		for fName, idx := range fieldIdx {
+		for fName, idx := range possibleIdx {
 			if len(idx) == 1 {
 				dIdx = idx[0]
 				log.Printf("the field of %d-th index is determined to be %s", dIdx, fName)
-				dFieldIdx[fName] = dIdx
+				fieldIdx[fName] = dIdx
 				break
 			}
 		}
@@ -109,14 +111,14 @@ func main() {
 			log.Fatal("something went wrong")
 		}
 		// remove the determined index from candidates
-		for fName := range fieldIdx {
-			fieldIdx[fName] = removeFromInts(fieldIdx[fName], dIdx)
+		for fName := range possibleIdx {
+			possibleIdx[fName] = removeFromInts(possibleIdx[fName], dIdx)
 		}
 	}
 
 	// compute the 'departure*' values on your ticket
 	result := 1
-	for fName, i := range dFieldIdx {
+	for fName, i := range fieldIdx {
 		if strings.HasPrefix(fName, "departure") {
 			result *= yourTickets[i]
 		}
@@ -142,7 +144,6 @@ func splitToInts(fields string) []int {
 	return nums
 }
 
-// the discarded values are represented by -1
 func getValidTickets(tickets []int, ivlsMap map[string][]INTERVAL) []int {
 	var validTickets []int
 	for _, t := range tickets {
@@ -154,6 +155,7 @@ func getValidTickets(tickets []int, ivlsMap map[string][]INTERVAL) []int {
 				break
 			}
 		}
+		// the discarded values are represented by -1
 		if !valid {
 			validTickets = append(validTickets, -1)
 		}
