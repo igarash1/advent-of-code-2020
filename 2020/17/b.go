@@ -21,8 +21,15 @@ func getState(c byte) State {
 	}
 }
 
+// dimension of coordinates
+const DIM = 4
+
 type Point struct {
-	x, y, z, w int
+	crd [DIM]int
+}
+
+func newPoint(x, y int) Point {
+	return Point{[DIM]int{x, y}}
 }
 
 func getCopy(source map[Point]State) map[Point]State {
@@ -41,22 +48,33 @@ func getCopyWithInit(source map[Point]State, initValue State) map[Point]State {
 	return target
 }
 
+// enumerate neighbors of a point including itself
+func getNeighbors(p Point) []Point {
+	res := []Point{p}
+	for d := 0; d < DIM; d++ {
+		var next []Point
+		for _, cur := range res {
+			for r := -1; r <= 1; r++ {
+				np := cur
+				np.crd[d] += r
+				next = append(next, np)
+			}
+		}
+		res = next
+	}
+	return res
+}
+
 func extendCube(cubes map[Point]State) map[Point]State {
 	for p, s := range cubes {
-		// do not extend if unnecessary
 		if s == INACTIVE {
+			// do not extend if unnecessary
 			continue
 		}
-		for rx := -1; rx <= 1; rx++ {
-			for ry := -1; ry <= 1; ry++ {
-				for rz := -1; rz <= 1; rz++ {
-					for rw := -1; rw <= 1; rw++ {
-						np := Point{p.x + rx, p.y + ry, p.z + rz, p.w + rw}
-						if _, ok := cubes[np]; !ok {
-							cubes[np] = INACTIVE
-						}
-					}
-				}
+		neighs := getNeighbors(p)
+		for _, np := range neighs {
+			if _, ok := cubes[np]; !ok {
+				cubes[np] = INACTIVE
 			}
 		}
 	}
@@ -65,16 +83,10 @@ func extendCube(cubes map[Point]State) map[Point]State {
 
 func countNbActive(cubes map[Point]State, p Point) int {
 	cnt := 0
-	for rx := -1; rx <= 1; rx++ {
-		for ry := -1; ry <= 1; ry++ {
-			for rz := -1; rz <= 1; rz++ {
-				for rw := -1; rw <= 1; rw++ {
-					np := Point{p.x + rx, p.y + ry, p.z + rz, p.w + rw}
-					if _, ok := cubes[np]; ok && np != p && cubes[np] == ACTIVE {
-						cnt++
-					}
-				}
-			}
+	neighs := getNeighbors(p)
+	for _, np := range neighs {
+		if _, ok := cubes[np]; ok && np != p && cubes[np] == ACTIVE {
+			cnt++
 		}
 	}
 	return cnt
@@ -86,7 +98,7 @@ func main() {
 	for y := 0; scanner.Scan(); y++ {
 		line := scanner.Text()
 		for x, c := range line {
-			cubes[Point{x, y, 0, 0}] = getState(byte(c))
+			cubes[newPoint(x, y)] = getState(byte(c))
 		}
 	}
 

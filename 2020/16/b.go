@@ -17,6 +17,65 @@ func (ivl INTERVAL) Within(p int) bool {
 	return ivl.left <= p && p <= ivl.right
 }
 
+
+func toInt(s string) int {
+	if i, err := strconv.Atoi(s); err != nil {
+		log.Fatal(err)
+		return -1
+	}
+	return i
+}
+
+func splitToInts(fields string) []int {
+	var nums []int
+	ss := strings.Split(fields, ",")
+	for _, s := range ss {
+		nums = append(nums, toInt(s))
+	}
+	return nums
+}
+
+func isValidTicket(ticket int, ivls []INTERVAL) bool {
+	if ticket == -1 {
+		return true
+	}
+	for _, ivl := range ivls {
+		if ivl.Within(ticket) {
+			return true
+		}
+	}
+	return false
+}
+
+func getValidTickets(tickets []int, ivlsMap map[string][]INTERVAL) []int {
+	var validTickets []int
+	for _, t := range tickets {
+		valid := false
+		for _, ivls := range ivlsMap {
+			if isValidTicket(t, ivls) {
+				valid = true
+				validTickets = append(validTickets, t)
+				break
+			}
+		}
+		// the discarded values are represented by -1
+		if !valid {
+			validTickets = append(validTickets, -1)
+		}
+	}
+	return validTickets
+}
+
+func removeFromInts(nums []int, target int) []int {
+	var ret []int
+	for _, v := range nums {
+		if v != target {
+			ret = append(ret, v)
+		}
+	}
+	return ret
+}
+
 func main() {
 	ivlsMap := make(map[string][]INTERVAL)
 
@@ -74,7 +133,7 @@ func main() {
 	}
 
 	// enumerate possible indices for each field
-	// (that corresponds to making a bipartite graph)
+	// (which corresponds to making a bipartite graph)
 	possibleIdx := make(map[string][]int)
 	for i, yt := range validYTs {
 		for fName, ivls := range ivlsMap {
@@ -95,7 +154,7 @@ func main() {
 	}
 
 	// determine which field is which
-	// (that corresponds to determine a perfect matching in a bipartite graph)
+	// (which corresponds to determining a perfect matching in a bipartite graph)
 	fieldIdx := make(map[string]int)
 	for len(fieldIdx) < len(ivlsMap) {
 		dIdx := -1
@@ -116,7 +175,7 @@ func main() {
 		}
 	}
 
-	// compute the 'departure*' values on your ticket
+	// compute the multiple of the 'departure' values on your ticket
 	result := 1
 	for fName, i := range fieldIdx {
 		if strings.HasPrefix(fName, "departure") {
@@ -124,62 +183,4 @@ func main() {
 		}
 	}
 	fmt.Println(result)
-}
-
-func toInt(s string) int {
-	if i, err := strconv.Atoi(s); err != nil {
-		log.Fatal(err)
-		return -1
-	}
-	return i
-}
-
-func splitToInts(fields string) []int {
-	var nums []int
-	ss := strings.Split(fields, ",")
-	for _, s := range ss {
-		nums = append(nums, toInt(s))
-	}
-	return nums
-}
-
-func getValidTickets(tickets []int, ivlsMap map[string][]INTERVAL) []int {
-	var validTickets []int
-	for _, t := range tickets {
-		valid := false
-		for _, ivls := range ivlsMap {
-			if isValidTicket(t, ivls) {
-				valid = true
-				validTickets = append(validTickets, t)
-				break
-			}
-		}
-		// the discarded values are represented by -1
-		if !valid {
-			validTickets = append(validTickets, -1)
-		}
-	}
-	return validTickets
-}
-
-func isValidTicket(ticket int, ivls []INTERVAL) bool {
-	if ticket == -1 {
-		return true
-	}
-	for _, ivl := range ivls {
-		if ivl.Within(ticket) {
-			return true
-		}
-	}
-	return false
-}
-
-func removeFromInts(nums []int, target int) []int {
-	var ret []int
-	for _, v := range nums {
-		if v != target {
-			ret = append(ret, v)
-		}
-	}
-	return ret
 }

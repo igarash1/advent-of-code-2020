@@ -17,6 +17,40 @@ func (ivl INTERVAL) Within(p int) bool {
 	return ivl.left <= p && p <= ivl.right
 }
 
+func toInt(s string) int {
+	if i, err := strconv.Atoi(s); err != nil {
+		log.Fatal(err)
+		return -1
+	}
+	return i
+}
+
+func splitToInts(fields string) []int {
+	var nums []int
+	ss := strings.Split(fields, ",")
+	for _, snum := range ss {
+		nums = append(nums, toInt(snum))
+	}
+	return nums
+}
+
+func computeErrors(tickets []int, ivls []INTERVAL) int {
+	ret := 0
+	for _, t := range tickets {
+		valid := false
+		for _, ivl := range ivls {
+			if ivl.Within(t) {
+				valid = true
+				break
+			}
+		}
+		if !valid {
+			ret += t
+		}
+	}
+	return ret
+}
+
 func main() {
 	var ivls []INTERVAL
 
@@ -73,38 +107,4 @@ func main() {
 	}
 
 	fmt.Println(result)
-}
-
-func toInt(s string) int {
-	if i, err := strconv.Atoi(s); err != nil {
-		log.Fatal(err)
-		return -1
-	}
-	return i
-}
-
-func splitToInts(fields string) []int {
-	var nums []int
-	ss := strings.Split(fields, ",")
-	for _, snum := range ss {
-		nums = append(nums, toInt(snum))
-	}
-	return nums
-}
-
-func computeErrors(tickets []int, ivls []INTERVAL) int {
-	ret := 0
-	for _, t := range tickets {
-		valid := false
-		for _, ivl := range ivls {
-			if ivl.Within(t) {
-				valid = true
-				break
-			}
-		}
-		if !valid {
-			ret += t
-		}
-	}
-	return ret
 }
