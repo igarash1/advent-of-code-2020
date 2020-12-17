@@ -24,7 +24,7 @@ func getState(c byte) State {
 const DIM = 3
 
 type Point struct {
-	crd [DIM]int
+	x [DIM]int
 }
 
 func newPoint(x, y int) Point {
@@ -55,7 +55,7 @@ func getNeighbors(p Point) []Point {
 		for _, cur := range res {
 			for r := -1; r <= 1; r++ {
 				np := cur
-				np.crd[d] += r
+				np.x[d] += r
 				next = append(next, np)
 			}
 		}
