@@ -5,78 +5,58 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 )
 
-type Optype int
-
-const (
-	PLUS Optype = iota
-	MULT
-)
+type Number int
+type Index int
 
 func isDigit(c byte) bool {
 	return '0' <= c && c <= '9'
 }
 
-func getRightPar(s string, i int) int {
-	if s[i] != '(' {
-		log.Fatal("NOT LEFT PARENTHESIS.")
+func expr(s string, i Index) (Number, Index){
+	var result Number
+	result, i = term(s, i)
+	for s[i] == '*' || s[i] == '+' {
+		rterm, j := term(s, i + 1)
+		if s[i] == '*' {
+			result *= rterm
+		} else {
+			result += rterm
+		}
+		i = j
 	}
-	cnt := 0
-	for ; i < len(s); i++ {
-		if s[i] == '(' {
-			cnt++
-		}
-		if s[i] == ')' {
-			cnt--
-		}
-		if cnt == 0 {
-			return i
-		}
-	}
-	log.Fatal("INVALID EXPRESSION: ", s)
-	return -1
+	return result, i
 }
 
-func calc(s string, l, r int) int {
-	op := PLUS
-	result := 0
-	for ; l <= r; l++ {
-		if s[l] == ' ' {
-			continue
-		}
-		if s[l] == '+' {
-			op = PLUS
-		} else if s[l] == '*' {
-			op = MULT
-		} else {
-			num := 0
-			if s[l] == '(' {
-				rp := getRightPar(s, l)
-				num = calc(s, l+1, rp-1)
-				l = rp
-			} else {
-				for ; l <= r && isDigit(s[l]); l++ {
-					num = num*10 + int(s[l]-'0')
-				}
-				l--
-			}
-			if op == PLUS {
-				result += num
-			} else {
-				result *= num
-			}
-		}
+func term(s string, i Index) (Number, Index) {
+	if s[i] == '(' {
+		result, i := expr(s, i + 1)
+		return result, i + 1 // skip for right parenthesis
+	} else {
+		return number(s, i)
 	}
-	return result
+}
+
+func number(s string, i Index) (Number, Index) {
+	var num Number = 0
+	for ; isDigit(s[i]); i++ {
+		num = num*10 + Number(s[i]-'0')
+	}
+	return num, i
 }
 
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
-	result := 0
+	var result Number = 0
 	for scanner.Scan() {
 		line := scanner.Text()
-		result += calc(line, 0, len(line)-1)
+		// remove all whitespaces and padding for simpler implementation
+		line = strings.ReplaceAll(line, " ", "") + " "
+		v, _ := expr(line, 0)
+		log.Println(line, " = ", v)
+		result += v
 	}
 	fmt.Println(result)
 }
