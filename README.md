@@ -23,7 +23,7 @@ Day 15 | :heavy_check_mark: | | | | | |
 Day 16 | :heavy_check_mark: | | | | | |
 Day 17 | :heavy_check_mark: | | | | | |
 Day 18 | :heavy_check_mark: | | | | | |
-Day 19 | | | | | | |
+Day 19 | :heavy_check_mark: | | | | | |
 Day 20 | | | | | | |
 Day 21 | | | | | | |
 Day 22 | | | | | | |
