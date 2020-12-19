@@ -26,12 +26,12 @@ func createRegex(rules map[int]string, ruleNum int) string {
 	}
 	if ruleNum == 11 {
 		// simply make the nested regex for the recusive patterns: 42 31 | 42 42 31 31 |  ...
-		const INF = 100000 // the maximum length of regex, I guess from the data
+		const MAX_DEPTH = 5 // the maximum depth of the nest, I guess roughly from the data
 		regexResult := ""
 		cur := ""
 		rule42s := createRegex(rules, 42)
 		rule31s := createRegex(rules, 31)
-		for len(regexResult) < INF {
+		for d := 0;d < MAX_DEPTH;d++ {
 			cur = "(" + rule42s + cur + rule31s + ")"
 			if len(regexResult) > 0 {
 				regexResult += "|"
