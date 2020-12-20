@@ -3,20 +3,11 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"os"
-	"strconv"
 	"strings"
-)
 
-func toInt(s string) int {
-	if i, err := strconv.Atoi(s); err != nil {
-		log.Fatal(err)
-		return -1
-	} else {
-		return i
-	}
-}
+	"../helper"
+)
 
 /*
 * mode_inverse(x, m):
@@ -41,18 +32,18 @@ func mod_inverse(x, m int) int {
 
 func main() {
 	var ts int
-	busRem := []int{}
-	busIDs := []int{}
+	var busRem []int
+	var busIDs []int
 
 	fmt.Scan(&ts)
 
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
-	raw_input := strings.Replace(scanner.Text(), " ", "", -1)
-	input := strings.Split(raw_input, ",")
+	rawInput := strings.Replace(scanner.Text(), " ", "", -1)
+	input := strings.Split(rawInput, ",")
 	for i, s := range input {
 		if s != "x" {
-			bid := toInt(s)
+			bid := helper.ToInt(s)
 			busRem = append(busRem, (bid-(i%bid))%bid)
 			busIDs = append(busIDs, bid)
 		}

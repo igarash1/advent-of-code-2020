@@ -42,7 +42,7 @@ func move(seats []string) ([]string, bool) {
 }
 
 func main() {
-	seats := []string{}
+	var seats []string
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
 		seats = append(seats, scanner.Text())

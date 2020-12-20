@@ -6,18 +6,10 @@ import (
 	"log"
 	"os"
 	"regexp"
-	"strconv"
 	"strings"
-)
 
-func toInt(s string) int {
-	if i, err := strconv.Atoi(s); err != nil {
-		log.Fatal(err)
-		return -1
-	} else {
-		return i
-	}
-}
+	"../helper"
+)
 
 func createRegex(rules map[int]string, ruleNum int) string {
 	if ruleStr, ok := rules[ruleNum]; !ok {
@@ -39,7 +31,7 @@ func createRegex(rules map[int]string, ruleNum int) string {
 				log.Fatal("something wrong", ruleNums)
 			}
 			for _, rs := range ruleNums {
-				r := toInt(rs)
+				r := helper.ToInt(rs)
 				regex += createRegex(rules, r)
 			}
 			regex += ")"
@@ -62,7 +54,7 @@ func main() {
 			break
 		}
 		ss := strings.Split(line, ":")
-		ruleNum := toInt(ss[0])
+		ruleNum := helper.ToInt(ss[0])
 		rules[ruleNum] = ss[1]
 	}
 

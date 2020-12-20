@@ -6,18 +6,10 @@ import (
 	"log"
 	"os"
 	"regexp"
-	"strconv"
 	"strings"
-)
 
-func toInt(s string) int {
-	v, err := strconv.Atoi(s)
-	if err != nil {
-		return 0
-		// log.Fatal("ERROR in convertin string to int ", err)
-	}
-	return v
-}
+	"../helper"
+)
 
 func validValueRange(key string, value string) bool {
 	var num int
@@ -25,9 +17,9 @@ func validValueRange(key string, value string) bool {
 		if len(value) < 3 {
 			return false
 		}
-		num = toInt(value[:len(value)-2])
+		num = helper.ToInt(value[:len(value)-2])
 	} else {
-		num = toInt(value)
+		num = helper.ToInt(value)
 	}
 
 	if key == "byr" {

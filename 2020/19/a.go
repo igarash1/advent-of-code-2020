@@ -1,22 +1,13 @@
 package main
 
 import (
+	"../helper"
 	"bufio"
 	"fmt"
 	"log"
 	"os"
-	"strconv"
 	"strings"
 )
-
-func toInt(s string) int {
-	if i, err := strconv.Atoi(s); err != nil {
-		log.Fatal(err)
-		return -1
-	} else {
-		return i
-	}
-}
 
 // returns the index of where the condition matched firstly, or -1 if not.
 func match(rules map[int]string, s string, ruleNum int) int {
@@ -41,7 +32,7 @@ func match(rules map[int]string, s string, ruleNum int) int {
 			matched := true
 			matchedLast := -1
 			for _, rs := range ruleNums {
-				r := toInt(rs)
+				r := helper.ToInt(rs)
 				//log.Println("Checking if ",  s[matchedLast + 1:], " matches to the rule ", r)
 				if p := match(rules, s[matchedLast+1:], r); p == -1 {
 					//log.Print(s, " doesn't match to the rule ", r)
@@ -79,7 +70,7 @@ func main() {
 			break
 		}
 		ss := strings.Split(line, ":")
-		ruleNum := toInt(ss[0])
+		ruleNum := helper.ToInt(ss[0])
 		rules[ruleNum] = ss[1]
 	}
 

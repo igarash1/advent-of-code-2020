@@ -5,22 +5,14 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strconv"
 	"strings"
+
+	"../helper"
 )
 
-func toInt(s string) int {
-	if i, err := strconv.Atoi(s); err != nil {
-		log.Fatal(err)
-		return -1
-	} else {
-		return i
-	}
-}
-
 func main() {
-	ops := []string{}
-	nums := []int{}
+	var ops []string
+	var nums []int
 	scanner := bufio.NewScanner(os.Stdin)
 	for i := 0; scanner.Scan(); i++ {
 		line := scanner.Text()
@@ -30,7 +22,7 @@ func main() {
 			continue
 		}
 		ops = append(ops, terms[0])
-		nums = append(nums, toInt(terms[1]))
+		nums = append(nums, helper.ToInt(terms[1]))
 	}
 
 	result := 0

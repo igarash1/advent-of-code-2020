@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-func toInt(s string) int {
+func helper.ToInt(s string) int {
 	if i, err := strconv.Atoi(s); err != nil {
 		log.Fatal(err)
 		return -1
@@ -26,12 +26,12 @@ func createRegex(rules map[int]string, ruleNum int) string {
 	}
 	if ruleNum == 11 {
 		// simply make the nested regex for the recusive patterns: 42 31 | 42 42 31 31 |  ...
-		const MAX_DEPTH = 5 // the maximum depth of the nest, I guess roughly from the data
+		const MAX_DEPTH = 5 // the maximum depth of the nest, I guess roughly from the given input
 		regexResult := ""
 		cur := ""
 		rule42s := createRegex(rules, 42)
 		rule31s := createRegex(rules, 31)
-		for d := 0;d < MAX_DEPTH;d++ {
+		for d := 0; d < MAX_DEPTH; d++ {
 			cur = "(" + rule42s + cur + rule31s + ")"
 			if len(regexResult) > 0 {
 				regexResult += "|"
@@ -60,7 +60,7 @@ func createRegex(rules map[int]string, ruleNum int) string {
 				log.Fatal("something wrong", ruleNums)
 			}
 			for _, rs := range ruleNums {
-				r := toInt(rs)
+				r := helper.ToInt(rs)
 				regex += createRegex(rules, r)
 			}
 			regex += ")"
@@ -84,7 +84,7 @@ func main() {
 		}
 		ss := strings.Split(line, ":")
 		//log.Println(ss[0], "and", ss[1])
-		ruleNum := toInt(ss[0])
+		ruleNum := helper.ToInt(ss[0])
 		rules[ruleNum] = ss[1]
 	}
 

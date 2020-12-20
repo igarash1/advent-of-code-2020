@@ -7,6 +7,21 @@ import (
 	"os"
 )
 
+func setBit(x uint64, i int, b uint64) uint64 {
+	return ((^(uint64(1) << i)) & x) | (b << i)
+}
+
+func writeMemory(mem map[uint64]uint64, mask string, addr uint64, value uint64) map[uint64]uint64 {
+	for j, c := range mask {
+		bitPos := 35 - j
+		if c != 'X' {
+			value = setBit(value, bitPos, uint64(c-'0'))
+		}
+	}
+	mem[addr] = value
+	return mem
+}
+
 func main() {
 	var curMask string
 	mem := make(map[uint64]uint64)
@@ -35,19 +50,4 @@ func main() {
 		result += v
 	}
 	fmt.Println(result)
-}
-
-func setBit(x uint64, i int, b uint64) uint64 {
-	return ((^(uint64(1) << i)) & x) | (b << i)
-}
-
-func writeMemory(mem map[uint64]uint64, mask string, addr uint64, value uint64) map[uint64]uint64 {
-	for j, c := range mask {
-		bitPos := 35 - j
-		if c != 'X' {
-			value = setBit(value, bitPos, uint64(c-'0'))
-		}
-	}
-	mem[addr] = value
-	return mem
 }

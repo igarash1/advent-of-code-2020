@@ -15,15 +15,15 @@ func isDigit(c byte) bool {
 	return '0' <= c && c <= '9'
 }
 
-func expr(s string, i Index) (Number, Index){
+func expr(s string, i Index) (Number, Index) {
 	var result Number
 	result, i = term(s, i)
 	for s[i] == '*' || s[i] == '+' {
-		rterm, j := term(s, i + 1)
+		rTerm, j := term(s, i+1)
 		if s[i] == '*' {
-			result *= rterm
+			result *= rTerm
 		} else {
-			result += rterm
+			result += rTerm
 		}
 		i = j
 	}
@@ -32,7 +32,7 @@ func expr(s string, i Index) (Number, Index){
 
 func term(s string, i Index) (Number, Index) {
 	if s[i] == '(' {
-		result, i := expr(s, i + 1)
+		result, i := expr(s, i+1)
 		return result, i + 1 // skip for right parenthesis
 	} else {
 		return number(s, i)

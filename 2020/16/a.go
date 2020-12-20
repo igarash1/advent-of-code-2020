@@ -5,8 +5,9 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strconv"
 	"strings"
+
+	"../helper"
 )
 
 type INTERVAL struct {
@@ -17,19 +18,11 @@ func (ivl INTERVAL) Within(p int) bool {
 	return ivl.left <= p && p <= ivl.right
 }
 
-func toInt(s string) int {
-	if i, err := strconv.Atoi(s); err != nil {
-		log.Fatal(err)
-		return -1
-	}
-	return i
-}
-
 func splitToInts(fields string) []int {
 	var nums []int
 	ss := strings.Split(fields, ",")
 	for _, snum := range ss {
-		nums = append(nums, toInt(snum))
+		nums = append(nums, helper.ToInt(snum))
 	}
 	return nums
 }

@@ -5,24 +5,16 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strconv"
 	"strings"
-)
 
-func toInt(s string) int {
-	if i, err := strconv.Atoi(s); err != nil {
-		log.Fatal(err)
-		return -1
-	} else {
-		return i
-	}
-}
+	"../helper"
+)
 
 func main() {
 	var ts int
-	busIds := []int{}
+	var busIds []int
 
-	fmt.Scan(&ts)
+	_, _ = fmt.Scan(&ts)
 
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
@@ -31,7 +23,7 @@ func main() {
 			input := strings.Split(raw_input, ",")
 			for _, s := range input {
 				if s != "x" {
-					busIds = append(busIds, toInt(s))
+					busIds = append(busIds, helper.ToInt(s))
 				}
 			}
 		}

@@ -1,36 +1,19 @@
 package main
 
 import (
+	"../helper"
 	"bufio"
 	"fmt"
 	"log"
 	"os"
-	"strconv"
 )
 
-func toInt(s string) int {
-	if i, err := strconv.Atoi(s); err != nil {
-		log.Fatal(err)
-		return -1
-	} else {
-		return i
-	}
-}
-
 func getInstruction(s string) (byte, int) {
-	return byte(s[0]), toInt(s[1:])
-}
-
-func abs(i int) int {
-	if i < 0 {
-		return -i
-	} else {
-		return i
-	}
+	return byte(s[0]), helper.ToInt(s[1:])
 }
 
 func main() {
-	ists := []string{}
+	var ists []string
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
 		ists = append(ists, scanner.Text())
@@ -67,5 +50,5 @@ func main() {
 		wd = 0
 		log.Print(x, " ", y)
 	}
-	fmt.Println(abs(x) + abs(y))
+	fmt.Println(helper.Abs(x) + helper.Abs(y))
 }

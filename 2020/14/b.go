@@ -7,6 +7,35 @@ import (
 	"os"
 )
 
+func setBit(x uint64, i int, b uint64) uint64 {
+	return ((^(uint64(1) << i)) & x) | (b << i)
+}
+
+func writeMemory(mem map[uint64]uint64, mask string, addr uint64, value uint64) map[uint64]uint64 {
+	possAddr := []uint64{0}
+	for j, c := range mask {
+		var nextPossAddr []uint64
+		bitPos := 35 - j
+		for _, pad := range possAddr {
+			if c == 'X' {
+				nextPossAddr = append(nextPossAddr, setBit(pad, bitPos, 0))
+				nextPossAddr = append(nextPossAddr, setBit(pad, bitPos, 1))
+			} else {
+				pad = setBit(pad, bitPos, (addr>>(bitPos))&1)
+				if c == '1' {
+					pad = setBit(pad, bitPos, 1)
+				}
+				nextPossAddr = append(nextPossAddr, pad)
+			}
+		}
+		possAddr = nextPossAddr
+	}
+	for _, a := range possAddr {
+		mem[a] = value
+	}
+	return mem
+}
+
 func main() {
 	var curMask string
 	mem := make(map[uint64]uint64)
@@ -36,33 +65,4 @@ func main() {
 	}
 
 	fmt.Println(result)
-}
-
-func setBit(x uint64, i int, b uint64) uint64 {
-	return ((^(uint64(1) << i)) & x) | (b << i)
-}
-
-func writeMemory(mem map[uint64]uint64, mask string, addr uint64, value uint64) map[uint64]uint64 {
-	possAddr := []uint64{0}
-	for j, c := range mask {
-		var nextPossAddr []uint64
-		bitPos := 35 - j
-		for _, pad := range possAddr {
-			if c == 'X' {
-				nextPossAddr = append(nextPossAddr, setBit(pad, bitPos, 0))
-				nextPossAddr = append(nextPossAddr, setBit(pad, bitPos, 1))
-			} else {
-				pad = setBit(pad, bitPos, (addr>>(bitPos))&1)
-				if c == '1' {
-					pad = setBit(pad, bitPos, 1)
-				}
-				nextPossAddr = append(nextPossAddr, pad)
-			}
-		}
-		possAddr = nextPossAddr
-	}
-	for _, a := range possAddr {
-		mem[a] = value
-	}
-	return mem
 }
