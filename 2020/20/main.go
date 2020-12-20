@@ -91,9 +91,8 @@ type State struct {
 
 func (s *State) Init() {
 	s.result = make([][]Grid, s.NSea)
-	//s.resultID = make([][]int, s.NSea)
 	for y := 0; y < s.NSea; y++ {
-		//s.resultID[y] = make([]int, s.NSea)
+	for y := 0; y < s.NSea; y++ {
 		s.result[y] = make([]Grid, s.NSea)
 	}
 	for y := 0; y < s.NSea; y++ {
