@@ -78,10 +78,9 @@ func checkVertical(up Grid, down Grid) bool {
 }
 
 // struct to store state for backtraking
-type State struct {
+type Solver struct {
 	Tiles map[int]Grid
 	NSea  int
-
 	// use them in backtracking
 	found     bool
 	used      map[int]bool
@@ -89,9 +88,16 @@ type State struct {
 	result    [][]Grid
 }
 
-func (s *State) Init() {
+func NewSolver(tiles map[int]Grid) *Solver {
+	s := &Solver{
+		Tiles: tiles,
+		NSea: int(math.Sqrt(float64(len(tiles)))),
+		found: false,
+		used: make(map[int]bool),
+		cornerMul: 1,
+	}
 	s.result = make([][]Grid, s.NSea)
-	for y := 0; y < s.NSea; y++ {
+
 	for y := 0; y < s.NSea; y++ {
 		s.result[y] = make([]Grid, s.NSea)
 	}
@@ -101,12 +107,10 @@ func (s *State) Init() {
 		}
 	}
 
-	s.used = make(map[int]bool)
-	s.cornerMul = 1
-	s.found = false
+	return s
 }
 
-func (s *State) valid(y, x int) bool {
+func (s *Solver) valid(y, x int) bool {
 	if y > 0 && !checkVertical(s.result[y-1][x], s.result[y][x]) {
 		return false
 	}
@@ -116,7 +120,7 @@ func (s *State) valid(y, x int) bool {
 	return true
 }
 
-func (s *State) dfs(y, x int) {
+func (s *Solver) backtrack(y, x int) {
 	if s.found {
 		// abort backtracking
 		return
@@ -125,7 +129,7 @@ func (s *State) dfs(y, x int) {
 	if y == s.NSea-1 && x == s.NSea-1 {
 		// s.printIDs()
 		fmt.Println("The ansewr to #1: ", s.cornerMul)
-		s.countSeaMonster()
+		s.findSeaMonsters()
 		s.found = true
 		return
 	}
@@ -147,11 +151,11 @@ func (s *State) dfs(y, x int) {
 		s.used[nid] = true
 		for d := 0; d < 4; d++ {
 			if s.valid(ny, nx) {
-				s.dfs(ny, nx)
+				s.backtrack(ny, nx)
 			}
 			s.result[ny][nx] = flip(s.result[ny][nx])
 			if s.valid(ny, nx) {
-				s.dfs(ny, nx)
+				s.backtrack(ny, nx)
 			}
 			s.result[ny][nx] = flip(s.result[ny][nx])
 			s.result[ny][nx] = rotateRight(s.result[ny][nx])
@@ -164,7 +168,7 @@ func (s *State) dfs(y, x int) {
 	}
 }
 
-func (s *State) countSeaMonster() {
+func (s *Solver) findSeaMonsters() {
 	// create a sea from the result
 	rN := s.NSea * (NTILE - 2)
 	sea := make(Grid, rN)
@@ -232,10 +236,10 @@ func (s *State) countSeaMonster() {
 }
 
 func main() {
-	s := State{Tiles: make(map[int]Grid)}
+
+	tiles := make(map[int]Grid)
 
 	scanner := bufio.NewScanner(os.Stdin)
-	tileNumber := 0
 	for scanner.Scan() {
 		line := scanner.Text()
 		if len(line) == 0 {
@@ -244,18 +248,15 @@ func main() {
 		tileID := helper.ToInt(line[5 : len(line)-1])
 		for h := 0; h < NTILE; h++ {
 			scanner.Scan()
-			s.Tiles[tileID] = append(s.Tiles[tileID], []byte(scanner.Text()))
+			tiles[tileID] = append(tiles[tileID], []byte(scanner.Text()))
 		}
 
-		tileNumber++
 		if !scanner.Scan() {
 			break
 		}
 	}
-	log.Println("#tiles = ", tileNumber)
+	log.Println("#tiles = ", len(tiles))
 
-	s.NSea = int(math.Sqrt(float64(tileNumber)))
-
-	s.Init()
-	s.dfs(0, -1)
+	s := NewSolver(tiles)
+	s.backtrack(0, -1)
 }
