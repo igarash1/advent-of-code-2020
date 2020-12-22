@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	NTILE = 10
+	LEN_TILE = 10
 )
 
 // Grid for tiles and the whole sea
@@ -80,7 +80,8 @@ func checkVertical(up Grid, down Grid) bool {
 // struct to store state for backtraking
 type Solver struct {
 	Tiles map[int]Grid
-	NSea  int
+	// the number of tiles horizontally (and vertically)
+	LEN_TILE int
 	// use them in backtracking
 	found     bool
 	used      map[int]bool
@@ -91,19 +92,19 @@ type Solver struct {
 func NewSolver(tiles map[int]Grid) *Solver {
 	s := &Solver{
 		Tiles: tiles,
-		NSea: int(math.Sqrt(float64(len(tiles)))),
+		LEN_TILE: int(math.Sqrt(float64(len(tiles)))),
 		found: false,
 		used: make(map[int]bool),
 		cornerMul: 1,
 	}
-	s.result = make([][]Grid, s.NSea)
+	s.result = make([][]Grid, s.LEN_TILE)
 
-	for y := 0; y < s.NSea; y++ {
-		s.result[y] = make([]Grid, s.NSea)
+	for y := 0; y < s.LEN_TILE; y++ {
+		s.result[y] = make([]Grid, s.LEN_TILE)
 	}
-	for y := 0; y < s.NSea; y++ {
-		for x := 0; x < s.NSea; x++ {
-			s.result[y][x] = make(Grid, s.NSea)
+	for y := 0; y < s.LEN_TILE; y++ {
+		for x := 0; x < s.LEN_TILE; x++ {
+			s.result[y][x] = make(Grid, s.LEN_TILE)
 		}
 	}
 
@@ -126,7 +127,7 @@ func (s *Solver) backtrack(y, x int) {
 		return
 	}
 
-	if y == s.NSea-1 && x == s.NSea-1 {
+	if y == s.LEN_TILE-1 && x == s.LEN_TILE-1 {
 		// s.printIDs()
 		fmt.Println("The ansewr to #1: ", s.cornerMul)
 		s.findSeaMonsters()
@@ -138,10 +139,10 @@ func (s *Solver) backtrack(y, x int) {
 		if s.used[nid] {
 			continue
 		}
-		ny, nx := y+(x+1)/s.NSea, (x+1)%s.NSea
+		ny, nx := y+(x+1)/s.LEN_TILE, (x+1)%s.LEN_TILE
 
-		isCorner := (nx == 0 && ny == 0) || (ny == 0 && nx == s.NSea-1) ||
-			(ny == s.NSea-1 && nx == 0) || (ny == s.NSea-1 && nx == s.NSea-1)
+		isCorner := (nx == 0 && ny == 0) || (ny == 0 && nx == s.LEN_TILE-1) ||
+			(ny == s.LEN_TILE-1 && nx == 0) || (ny == s.LEN_TILE-1 && nx == s.LEN_TILE-1)
 		if isCorner {
 			s.cornerMul *= nid
 		}
@@ -170,12 +171,12 @@ func (s *Solver) backtrack(y, x int) {
 
 func (s *Solver) findSeaMonsters() {
 	// create a sea from the result
-	rN := s.NSea * (NTILE - 2)
+	rN := s.LEN_TILE * (LEN_TILE - 2)
 	sea := make(Grid, rN)
-	for y := 0; y < s.NSea; y++ {
-		for yy := 1; yy < NTILE-1; yy++ {
-			for x := 0; x < s.NSea; x++ {
-				sea[y*(NTILE-2)+yy-1] = append(sea[y*(NTILE-2)+yy-1], s.result[y][x][yy][1:NTILE-1]...)
+	for y := 0; y < s.LEN_TILE; y++ {
+		for yy := 1; yy < LEN_TILE-1; yy++ {
+			for x := 0; x < s.LEN_TILE; x++ {
+				sea[y*(LEN_TILE-2)+yy-1] = append(sea[y*(LEN_TILE-2)+yy-1], s.result[y][x][yy][1:LEN_TILE-1]...)
 			}
 		}
 	}
@@ -236,17 +237,16 @@ func (s *Solver) findSeaMonsters() {
 }
 
 func main() {
-
 	tiles := make(map[int]Grid)
-
 	scanner := bufio.NewScanner(os.Stdin)
+
 	for scanner.Scan() {
 		line := scanner.Text()
 		if len(line) == 0 {
 			continue
 		}
 		tileID := helper.ToInt(line[5 : len(line)-1])
-		for h := 0; h < NTILE; h++ {
+		for h := 0; h < LEN_TILE; h++ {
 			scanner.Scan()
 			tiles[tileID] = append(tiles[tileID], []byte(scanner.Text()))
 		}
