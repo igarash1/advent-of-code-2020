@@ -109,8 +109,10 @@ func recursiveCombat(deck1, deck2 []int) int {
 		deck1, deck2 = deck1[1:], deck2[1:]
 		if prev[hash] {
 			// there was a previous round with the same decks
-			deck1 = append(deck1, a, b)
-			continue
+			// 'the game instantly ends in a win for player 1.'
+			return getScore(deck1)
+			//deck1 = append(deck1, a, b)
+			//continue
 		} else if a <= len(deck1) && b <= len(deck2) {
 			// sub-game
 			if recursiveCombat(copyInts(deck1[:a]), copyInts(deck2[:b])) > 0 {
