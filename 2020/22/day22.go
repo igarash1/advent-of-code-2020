@@ -5,7 +5,8 @@ import (
 	"strings"
 )
 
-func getDeck(input string) ([]int, []int) {
+// returns the signed score of the winner. + if player 1 wins, - if player 2 wins.
+func getDecksFromInput(input string) ([]int, []int) {
 	players := strings.Split(input, "\n\n")
 	var deck1 []int
 	lines := strings.Split(players[0], "\n")
@@ -40,6 +41,7 @@ func getScore(deck []int) int {
 	return score
 }
 
+// returns the score of the winner.
 func regularCombat(deck1 []int, deck2 []int) int {
 	for len(deck1) > 0 && len(deck2) > 0 {
 		a, b := deck1[0], deck2[0]
@@ -54,13 +56,16 @@ func regularCombat(deck1 []int, deck2 []int) int {
 }
 
 func part1(input string) int {
-	deck1, deck2 := getDeck(input)
+	deck1, deck2 := getDecksFromInput(input)
 	return aoc.Abs(regularCombat(deck1, deck2))
 }
 
+// the bases for hashing, use primes to avoid hash collision
 const B1 uint64 = 5
 const B2 uint64 = 7
 
+// use hash to represent a state of the game while avoiding hash collision.
+// make sure it return the same result if the given state of decks is the same.
 func getHash(deck1 []int, deck2 []int) uint64 {
 	var hash uint64 = 0
 	for _, v := range deck1 {
@@ -80,6 +85,7 @@ func copyInts(src []int) []int {
 	return dst
 }
 
+// returns the signed score of the winner. + if player 1 wins, - if player 2 wins.
 func recursiveCombat(deck1, deck2 []int) int {
 	prev := make(map[uint64]bool)
 	for r := 1; len(deck1) > 0 && len(deck2) > 0; r++ {
@@ -87,15 +93,18 @@ func recursiveCombat(deck1, deck2 []int) int {
 		a, b := deck1[0], deck2[0]
 		deck1, deck2 = deck1[1:], deck2[1:]
 		if prev[hash] {
+			// there was a previous round with the same decks
 			deck1 = append(deck1, a, b)
 			continue
 		} else if a <= len(deck1) && b <= len(deck2) {
+			// sub-game
 			if recursiveCombat(copyInts(deck1[:a]), copyInts(deck2[:b])) > 0 {
 				deck1 = append(deck1, a, b)
 			} else {
 				deck2 = append(deck2, b, a)
 			}
 		} else {
+			// just play a regular game
 			if a > b {
 				deck1 = append(deck1, a, b)
 			} else {
@@ -106,13 +115,10 @@ func recursiveCombat(deck1, deck2 []int) int {
 	}
 
 	// return positive score if player 1 wins, otherwise negative score
-	if len(deck1) > 0 {
-		return getScore(deck1)
-	}
-	return -getScore(deck2)
+	return getScore(deck1) - getScore(deck2)
 }
 
 func part2(input string) int {
-	deck1, deck2 := getDeck(input)
+	deck1, deck2 := getDecksFromInput(input)
 	return aoc.Abs(recursiveCombat(deck1, deck2))
 }
