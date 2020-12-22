@@ -64,8 +64,23 @@ func part1(input string) int {
 const B1 uint64 = 5
 const B2 uint64 = 7
 
-// use hash to represent a state of the game while avoiding hash collision.
-// make sure it return the same result if the given state of decks is the same.
+/*
+	- use hashing to represent a state of the game while avoiding hash collision.
+	- see https://cp-algorithms.com/string/string-hashing.html
+ 	- use 2 bases to make sure it return the same result if the given state of decks is the same.
+	- you can convert the decks to a string and use it as hash keys as below, but it's slower.
+		func getString(deck1 []int, deck2 []int) string {
+			var b strings.Builder
+			for _, v := range deck1 {
+				fmt.Fprintf(&b, "%d,", v)
+			}
+			fmt.Fprintf(&b, "|")
+			for _, v := range deck2 {
+				fmt.Fprintf(&b, "%d,", v)
+			}
+			return b.String()
+		}
+*/
 func getHash(deck1 []int, deck2 []int) uint64 {
 	var hash uint64 = 0
 	for _, v := range deck1 {
