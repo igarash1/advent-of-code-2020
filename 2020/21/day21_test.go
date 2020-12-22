@@ -4,9 +4,9 @@ import "testing"
 
 func TestPart1(t *testing.T) {
 	tests := []struct {
-		in  string
+		in   string
 		want int
-	} {
+	}{
 		{
 			"mxmxvkd kfcds sqjhc nhms (contains dairy, fish)\ntrh fvjkl sbzzf mxmxvkd (contains dairy)\nsqjhc fvjkl (contains soy)\nsqjhc mxmxvkd sbzzf (contains fish)",
 			5},
@@ -25,9 +25,9 @@ func TestPart1(t *testing.T) {
 
 func TestPart2(t *testing.T) {
 	tests := []struct {
-		in  string
+		in   string
 		want string
-	} {
+	}{
 		{
 			"mxmxvkd kfcds sqjhc nhms (contains dairy, fish)\ntrh fvjkl sbzzf mxmxvkd (contains dairy)\nsqjhc fvjkl (contains soy)\nsqjhc mxmxvkd sbzzf (contains fish)",
 			"mxmxvkd,sqjhc,fvjkl"},
