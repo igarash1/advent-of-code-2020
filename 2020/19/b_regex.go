@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-func helper.ToInt(s string) int {
+func aoc.ToInt(s string) int {
 	if i, err := strconv.Atoi(s); err != nil {
 		log.Fatal(err)
 		return -1
@@ -60,7 +60,7 @@ func createRegex(rules map[int]string, ruleNum int) string {
 				log.Fatal("something wrong", ruleNums)
 			}
 			for _, rs := range ruleNums {
-				r := helper.ToInt(rs)
+				r := aoc.ToInt(rs)
 				regex += createRegex(rules, r)
 			}
 			regex += ")"
@@ -84,7 +84,7 @@ func main() {
 		}
 		ss := strings.Split(line, ":")
 		//log.Println(ss[0], "and", ss[1])
-		ruleNum := helper.ToInt(ss[0])
+		ruleNum := aoc.ToInt(ss[0])
 		rules[ruleNum] = ss[1]
 	}
 

@@ -8,7 +8,7 @@ import (
 	"regexp"
 	"strings"
 
-	"../helper"
+	"aoc"
 )
 
 func validValueRange(key string, value string) bool {
@@ -17,9 +17,9 @@ func validValueRange(key string, value string) bool {
 		if len(value) < 3 {
 			return false
 		}
-		num = helper.ToInt(value[:len(value)-2])
+		num = aoc.ToInt(value[:len(value)-2])
 	} else {
-		num = helper.ToInt(value)
+		num = aoc.ToInt(value)
 	}
 
 	if key == "byr" {

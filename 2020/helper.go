@@ -1,4 +1,4 @@
-package helper
+package aoc
 
 import (
 	"io"
@@ -25,15 +25,15 @@ func Abs(i int) int {
 }
 
 func ReadStringFromFile(fileName string) string {
-	inputs, err := ioutil.ReadFile(fileName);
-	if  err != nil {
+	inputs, err := ioutil.ReadFile(fileName)
+	if err != nil {
 		log.Fatal(err)
 	}
 	return string(inputs)
 }
 
 func ReadString(r io.Reader) string {
-	inputs, err := ioutil.ReadAll(r);
+	inputs, err := ioutil.ReadAll(r)
 	if err != nil {
 		log.Fatal(err)
 	}

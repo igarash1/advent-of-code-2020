@@ -41,7 +41,7 @@ func getInput(input string) ([][]string, [][]string) {
 
 func getKeys(m map[string]string) []string {
 	var uniqList []string
-	for k, _ := range m {
+	for k := range m {
 		uniqList = append(uniqList, k)
 	}
 	return uniqList
@@ -75,7 +75,7 @@ func possible(graph map[string]map[string]bool, used map[string]bool, algs []str
 			continue
 		}
 		used[aName] = true
-		for iName, _ := range graph[aName] {
+		for iName := range graph[aName] {
 			if used[iName] {
 				continue
 			}
@@ -134,17 +134,17 @@ func enumerate(targetIng string, ings [][]string, algs [][]string, exclude map[s
 		}
 	}
 
-	var possAlg []string
+	var possAlgs []string
 	for _, aName := range candAlgs {
 		used := make(map[string]bool)
 		used[targetIng] = true
 		used[aName] = true
 		if possible(graph, used, algUniqList) {
-			possAlg = append(possAlg, aName)
+			possAlgs = append(possAlgs, aName)
 		}
 	}
 
-	return possAlg
+	return possAlgs
 }
 
 func part1(input string) int {
@@ -178,10 +178,10 @@ func part2(input string) string {
 			if _, ok := ingToAlg[iName]; ok {
 				continue
 			}
-			possAlg := enumerate(iName, ings, algs, exclude)
-			if len(possAlg) == 1 {
+			possAlgs := enumerate(iName, ings, algs, exclude)
+			if len(possAlgs) == 1 {
 				found = true
-				aName := possAlg[0]
+				aName := possAlgs[0]
 				ingToAlg[iName] = aName
 				exclude[iName] = true
 				exclude[aName] = true

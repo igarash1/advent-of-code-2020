@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"../helper"
+	"aoc"
 )
 
 func execute(ops []string, nums []int) (int, bool) {
@@ -51,7 +51,7 @@ func main() {
 			continue
 		}
 		ops = append(ops, terms[0])
-		nums = append(nums, helper.ToInt(terms[1]))
+		nums = append(nums, aoc.ToInt(terms[1]))
 	}
 
 	swap := func(i int) {

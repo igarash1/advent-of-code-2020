@@ -1,7 +1,7 @@
 package main
 
 import (
-	"../helper"
+	"aoc"
 	"bufio"
 	"fmt"
 	"log"
@@ -9,7 +9,7 @@ import (
 )
 
 func getInstruction(s string) (byte, int) {
-	return byte(s[0]), helper.ToInt(s[1:])
+	return byte(s[0]), aoc.ToInt(s[1:])
 }
 
 func main() {
@@ -50,5 +50,5 @@ func main() {
 		wd = 0
 		log.Print(x, " ", y)
 	}
-	fmt.Println(helper.Abs(x) + helper.Abs(y))
+	fmt.Println(aoc.Abs(x) + aoc.Abs(y))
 }

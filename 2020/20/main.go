@@ -7,7 +7,7 @@ import (
 	"math"
 	"os"
 
-	"../helper"
+	"aoc"
 )
 
 const (
@@ -91,10 +91,10 @@ type Solver struct {
 
 func NewSolver(tiles map[int]Grid) *Solver {
 	s := &Solver{
-		Tiles: tiles,
-		LEN_TILE: int(math.Sqrt(float64(len(tiles)))),
-		found: false,
-		used: make(map[int]bool),
+		Tiles:     tiles,
+		LEN_TILE:  int(math.Sqrt(float64(len(tiles)))),
+		found:     false,
+		used:      make(map[int]bool),
 		cornerMul: 1,
 	}
 	s.result = make([][]Grid, s.LEN_TILE)
@@ -245,7 +245,7 @@ func main() {
 		if len(line) == 0 {
 			continue
 		}
-		tileID := helper.ToInt(line[5 : len(line)-1])
+		tileID := aoc.ToInt(line[5 : len(line)-1])
 		for h := 0; h < LEN_TILE; h++ {
 			scanner.Scan()
 			tiles[tileID] = append(tiles[tileID], []byte(scanner.Text()))

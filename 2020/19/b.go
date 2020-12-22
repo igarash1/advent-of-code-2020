@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"../helper"
+	"aoc"
 )
 
 // returns the index of where the condition matched firstly, or -1 if not.
@@ -36,7 +36,7 @@ func match(rules map[int]string, s string, ruleNum int) int {
 			matched := true
 			matchedLast := -1
 			for _, rs := range ruleNums {
-				r := helper.ToInt(rs)
+				r := aoc.ToInt(rs)
 				//log.Println("Checking if ",  s[matchedLast + 1:], " matches to the rule ", r)
 				if p := match(rules, s[matchedLast+1:], r); p == -1 {
 					//log.Print(s, " doesn't match to the rule ", r)
@@ -74,7 +74,7 @@ func main() {
 			break
 		}
 		ss := strings.Split(line, ":")
-		ruleNum := helper.ToInt(ss[0])
+		ruleNum := aoc.ToInt(ss[0])
 		rules[ruleNum] = ss[1]
 	}
 

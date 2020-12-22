@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"../helper"
+	"aoc"
 )
 
 type INTERVAL struct {
@@ -22,7 +22,7 @@ func splitToInts(fields string) []int {
 	var nums []int
 	ss := strings.Split(fields, ",")
 	for _, snum := range ss {
-		nums = append(nums, helper.ToInt(snum))
+		nums = append(nums, aoc.ToInt(snum))
 	}
 	return nums
 }

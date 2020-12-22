@@ -8,7 +8,7 @@ import (
 	"regexp"
 	"strings"
 
-	"../helper"
+	"aoc"
 )
 
 func createRegex(rules map[int]string, ruleNum int) string {
@@ -31,7 +31,7 @@ func createRegex(rules map[int]string, ruleNum int) string {
 				log.Fatal("something wrong", ruleNums)
 			}
 			for _, rs := range ruleNums {
-				r := helper.ToInt(rs)
+				r := aoc.ToInt(rs)
 				regex += createRegex(rules, r)
 			}
 			regex += ")"
@@ -54,7 +54,7 @@ func main() {
 			break
 		}
 		ss := strings.Split(line, ":")
-		ruleNum := helper.ToInt(ss[0])
+		ruleNum := aoc.ToInt(ss[0])
 		rules[ruleNum] = ss[1]
 	}
 

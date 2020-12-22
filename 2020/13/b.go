@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"../helper"
+	"aoc"
 )
 
 /*
@@ -43,7 +43,7 @@ func main() {
 	input := strings.Split(rawInput, ",")
 	for i, s := range input {
 		if s != "x" {
-			bid := helper.ToInt(s)
+			bid := aoc.ToInt(s)
 			busRem = append(busRem, (bid-(i%bid))%bid)
 			busIDs = append(busIDs, bid)
 		}
