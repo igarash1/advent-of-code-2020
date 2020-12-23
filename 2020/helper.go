@@ -24,6 +24,36 @@ func Abs(i int) int {
 	}
 }
 
+func IntMin(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
+func IntMax(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+func GetMin(nums []int) int {
+	minv := nums[0]
+	for _, x := range nums {
+		minv = IntMin(minv, x)
+	}
+	return minv
+}
+
+func GetMax(nums []int) int {
+	maxv := nums[0]
+	for _, x := range nums {
+		maxv = IntMax(maxv, x)
+	}
+	return maxv
+}
+
 func ReadStringFromFile(fileName string) string {
 	inputs, err := ioutil.ReadFile(fileName)
 	if err != nil {

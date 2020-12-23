@@ -28,7 +28,7 @@ Day 19 | :heavy_check_mark: | | | | | |
 Day 20 | :heavy_check_mark: | | | | | |
 Day 21 | :heavy_check_mark: | | | | | |
 Day 22 | :heavy_check_mark: | | | | | |
-Day 23 | | | | | | |
+Day 23 | :heavy_check_mark: | | | | | |
 Day 24 | | | | | | |
 Day 25 | | | | | | |
 
