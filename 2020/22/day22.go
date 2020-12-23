@@ -60,15 +60,16 @@ func part1(input string) int {
 	return aoc.Abs(regularCombat(deck1, deck2))
 }
 
-// the bases for hashing, use primes to avoid hash collision
+// the bases for hashing, use primes to avoid hash collision (MOD = 2^64-1)
 const B1 uint64 = 5
 const B2 uint64 = 7
 
 /*
-	- use hashing to represent a state of the game while avoiding hash collision.
-	- see https://cp-algorithms.com/string/string-hashing.html
- 	- use 2 bases to make sure it return the same result if the given state of decks is the same.
-	- you can convert the decks to a string and use it as hash keys as below, but it's slower.
+	* use hashing to represent a state of the game while avoiding hash collision.
+	* see https://cp-algorithms.com/string/string-hashing.html
+ 	* use 2 bases to make sure it returns the different values if the given state is different.
+		(though there is a possibility that it will return a same value for the different states).
+	* you can convert the decks to a string and use it as hash keys as below, but it's slower(though it's enough faster for this problem)
 		func getString(deck1 []int, deck2 []int) string {
 			var b strings.Builder
 			for _, v := range deck1 {
