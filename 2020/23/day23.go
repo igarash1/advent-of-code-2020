@@ -2,7 +2,6 @@ package day23
 
 import (
 	"aoc"
-	//"log"
 	"strings"
 )
 
@@ -44,17 +43,18 @@ func shiftLeft(nums []int, d int) []int {
 	return newNums
 }
 
-// O(#CUPS * #MOVES) (too slow for part 2)
+// O(#CUPS * #MOVES) (too slow for part 2. see part2() for better solution)
 func part1(input string) int {
 	const MOVES = 100
 	cups := getInput(input)
 	lowest, highest := 1, 9
+	NCUPS := len(cups)
 	cur := 0
 	for t := 0; t < MOVES; t++ {
 		cur = t % len(cups)
 		pickUp := make(map[int]bool)
 		for i := 1; i <= 3; i++ {
-			pickUp[cups[(cur+i)%len(cups)]] = true
+			pickUp[cups[(cur+i)%NCUPS]] = true
 		}
 		dest := cups[cur]
 		for {
@@ -74,7 +74,7 @@ func part1(input string) int {
 			newCups = append(newCups, cup)
 			if cup == dest {
 				for i := 1; i <= 3; i++ {
-					newCups = append(newCups, cups[(cur+i)%len(cups)])
+					newCups = append(newCups, cups[(cur+i)%NCUPS])
 				}
 			}
 		}
@@ -109,16 +109,16 @@ func (list *CircularList) appendLast(t int) *Node {
 	return &newNode
 }
 
-func (list *CircularList) moveTo(from *Node, to *Node) {
+func (list *CircularList) move(from *Node, to *Node) {
+	if from == list.head {
+		list.head = from.next
+	}
 	from.prev.next = from.next
 	from.next.prev = from.prev
 	from.prev = to
 	from.next = to.next
 	to.next.prev = from
 	to.next = from
-	if from == list.head {
-		list.head = from.next
-	}
 	if to == list.tail {
 		list.tail = from
 	}
@@ -130,7 +130,7 @@ func part2(input string) int {
 	const NCUPS = 1000000
 	const MOVES = 10000000
 	firstCups := getInput(input)
-	pos := make(map[int]*Node)
+	pos := make([]*Node, NCUPS+1)
 
 	var list CircularList
 	for _, cup := range firstCups {
@@ -140,31 +140,23 @@ func part2(input string) int {
 		pos[i] = list.appendLast(i)
 	}
 
-	lowest, highest := 1, NCUPS
 	cur := list.head
-	for t := 0; t < MOVES; t++ {
-		pCups := make([]*Node, 3)
-		pick := cur.next
-		for i := range pCups {
-			pCups[i] = pick
-			pick = pick.next
-		}
+	for mv := 0; mv < MOVES; mv++ {
+		p1 := cur.next
+		p2 := cur.next.next
+		p3 := cur.next.next.next
 		dest := cur.val
 		for {
-			dest--
-			if dest < lowest {
-				dest = highest
-			}
-			if pCups[0].val != dest && pCups[1].val != dest && pCups[2].val != dest {
+			dest = (dest-2+NCUPS)%NCUPS + 1
+			if dest != p1.val && dest != p2.val && dest != p3.val {
 				break
 			}
 		}
-		last := pos[dest]
-		for _, pCup := range pCups {
-			list.moveTo(pCup, last)
-			last = pCup
-		}
+		list.move(p1, pos[dest])
+		list.move(p2, p1)
+		list.move(p3, p2)
 		cur = cur.next
 	}
+
 	return pos[1].next.val * pos[1].next.next.val
 }
