@@ -2,11 +2,12 @@
 
 My solutions to Advent of Code: https://adventofcode.com/
 
+## Progress
 
 Day  | 2020 in Go | 2019 in Scala | 2018 | 2017 | 2016 | 2015 |
 :---: | :----: | :---: | :---: | :---: | :---: | :---: |
 Day 1 | :heavy_check_mark: | :heavy_check_mark: | | | | |
-Day 2 | :heavy_check_mark: | | | | | |
+Day 2 | :heavy_check_mark: | :heavy_check_mark: | | | | |
 Day 3 | :heavy_check_mark: | | | | | |
 Day 4 | :heavy_check_mark: | | | | | |
 Day 5 | :heavy_check_mark: | | | | | |
