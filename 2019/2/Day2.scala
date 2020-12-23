@@ -57,45 +57,34 @@ object Day2 {
 
     def part2(input: String): Int = {
         val nums = input.split(",").map(Integer.parseInt)
-        var noun = 0
-        while (noun < 100) {
-            var verb = 0
-            while (verb < 100) {
-                val newNums = new Array[Int](nums.length)
-                for (i <- 0 until nums.length) {
-                    newNums(i) = nums(i)
-                }
-                newNums(1) = noun
-                newNums(2) = verb
-                if (compute(newNums) == 19690720) {
-                    return 100 * noun + verb
-                }
-                verb += 1
+        for (n <- 0 until 100; v <- 0 until 100) {
+            val newNums = new Array[Int](nums.length)
+            for (i <- nums.indices) {
+                newNums(i) = nums(i)
             }
-            noun += 1
+            newNums(1) = n
+            newNums(2) = v
+            if (compute(newNums) == 19690720) {
+                return 100 * n + v
+            }
         }
-        return -1
+        -1
     }
 
     def compute(nums: Array[Int]): Int = {
-        var i = 0
-        while (i < nums.length) {
-            val opcode = nums(i)
-            if (opcode == 99) return nums(0)
+        for (is <- 0 to nums.length / 4) {
+            val i = is * 4
             val a = nums(nums(i + 1))
             val b = nums(nums(i + 2))
             val out = nums(i + 3)
-            if (1 <= opcode && opcode <= 2) {
-                nums(out) = opcode match {
-                    case 1 => a + b
-                    case 2 => a * b
-                }
-            } else {
-                return -1
+            nums(i) match {
+                case 99 => return nums(0)
+                case 1 => nums(out) = a + b
+                case 2 => nums(out) = a * b
+                case _ => return -1
             }
-            i += 4
         }
-        return nums(0)
+        -1
     }
 }
 
