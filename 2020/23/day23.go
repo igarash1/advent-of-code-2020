@@ -89,12 +89,12 @@ type Node struct {
 	next *Node
 }
 
-type CycleList struct {
+type CircularList struct {
 	head *Node
 	tail *Node
 }
 
-func (list *CycleList) appendLast(t int) *Node {
+func (list *CircularList) appendLast(t int) *Node {
 	newNode := Node{t, list.tail, list.head}
 	if list.head == nil {
 		list.head = &newNode
@@ -109,17 +109,16 @@ func (list *CycleList) appendLast(t int) *Node {
 	return &newNode
 }
 
-func (list *CycleList) moveTo(from *Node, to *Node) {
-	if from == list.head {
-		list.head = from.next
-	}
+func (list *CircularList) moveTo(from *Node, to *Node) {
 	from.prev.next = from.next
 	from.next.prev = from.prev
-
 	from.prev = to
 	from.next = to.next
 	to.next.prev = from
 	to.next = from
+	if from == list.head {
+		list.head = from.next
+	}
 	if to == list.tail {
 		list.tail = from
 	}
@@ -133,7 +132,7 @@ func part2(input string) int {
 	firstCups := getInput(input)
 	pos := make(map[int]*Node)
 
-	var list CycleList
+	var list CircularList
 	for _, cup := range firstCups {
 		pos[cup] = list.appendLast(cup)
 	}
