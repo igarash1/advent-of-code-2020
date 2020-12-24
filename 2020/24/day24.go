@@ -11,9 +11,9 @@ type Point struct {
 }
 
 type HexTiles struct {
-	dx    [2][6]int
-	dy    [2][6]int
-	DIR   map[string]int
+	dx         [2][6]int
+	dy         [2][6]int
+	DIR        map[string]int
 	blackTiles map[Point]bool
 }
 
@@ -84,11 +84,11 @@ func (hex *HexTiles) isBlack(p Point) bool {
 }
 
 func (hex *HexTiles) getBlacks() []Point {
-	var blk []Point
+	var blks []Point
 	for p := range hex.blackTiles {
-		blk = append(blk, p)
+		blks = append(blks, p)
 	}
-	return blk
+	return blks
 }
 
 func (hex *HexTiles) getNeighs(p Point) []Point {
@@ -111,13 +111,13 @@ func (hex *HexTiles) getCandidateWhites() []Point {
 		}
 	}
 	var candWhiteList []Point
-	for p, _ := range candWhiteMap {
+	for p := range candWhiteMap {
 		candWhiteList = append(candWhiteList, p)
 	}
 	return candWhiteList
 }
 
-func (hex *HexTiles) countNeighB(p Point) int {
+func (hex *HexTiles) countNeighBlacks(p Point) int {
 	neighs := hex.getNeighs(p)
 	cnt := 0
 	for _, p := range neighs {
@@ -128,31 +128,35 @@ func (hex *HexTiles) countNeighB(p Point) int {
 	return cnt
 }
 
+func (hex *HexTiles) transition() {
+	// defer flipping to apply the rules simultaneously
+	deferredFlip := make(map[Point]bool)
+	// determine which tiles to be flipped
+	blacks := hex.getBlacks()
+	for _, p := range blacks {
+		cnt := hex.countNeighBlacks(p)
+		if cnt == 0 || 2 < cnt {
+			deferredFlip[p] = true
+		}
+	}
+	whites := hex.getCandidateWhites()
+	for _, p := range whites {
+		cnt := hex.countNeighBlacks(p)
+		if cnt == 2 {
+			deferredFlip[p] = true
+		}
+	}
+	// update the tiles
+	for p := range deferredFlip {
+		hex.flip(p)
+	}
+}
+
 func part2(input string) int {
-	_, tile := part1(input)
+	_, hex := part1(input)
 	for d := 0; d < 100; d++ {
-		// defer flipping to apply the rules simultaneously
-		deferredFlips := make(map[Point]bool)
-		// determine which blackTiles to be flipped
-		blacks := tile.getBlacks()
-		for _, p := range blacks {
-			cnt := tile.countNeighB(p)
-			if cnt == 0 || 2 < cnt {
-				deferredFlips[p] = true
-			}
-		}
-		whites := tile.getCandidateWhites()
-		for _, p := range whites {
-			cnt := tile.countNeighB(p)
-			if cnt == 2 {
-				deferredFlips[p] = true
-			}
-		}
-		// update the blackTiles
-		for p := range deferredFlips {
-			tile.flip(p)
-		}
+		hex.transition()
 		//log.Printf("Day %d: %d\n", d + 1, tile.countTotalBlacks())
 	}
-	return tile.countTotalBlacks()
+	return hex.countTotalBlacks()
 }
