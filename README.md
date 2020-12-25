@@ -2,9 +2,12 @@
 
 My solutions to Advent of Code: https://adventofcode.com/
 
+
+I'm trying AoC for learning programming languages I'm not familiar with, so do not expect them to be best or completed soon. (keep trying my best though) 
+
 ## Progress
 
-Day  | 2020 in Go | 2019 in Scala | 2018 | 2017 | 2016 | 2015 |
+Day  | 2020 in Go | 2019 in Scala | 2018  | 2017  | 2016 | 2015 |
 :---: | :----: | :---: | :---: | :---: | :---: | :---: |
 Day 1 | :heavy_check_mark: | :heavy_check_mark: | | | | |
 Day 2 | :heavy_check_mark: | :heavy_check_mark: | | | | |
