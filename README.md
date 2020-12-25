@@ -7,7 +7,7 @@ I'm trying AoC for learning programming languages I'm not familiar with, so do n
 
 ## Progress
 
-Day  | 2020 (in Go) | 2019 (in Scala) | 2018  | 2017  | 2016 | 2015 |
+Day  | 2020 (in Go) | 2019 (in Scala) | 2018 (in Haskell)  | 2017 (in Elm) | 2016 (in Elixir) | 2015 (in Clojure) |
 :---: | :----: | :---: | :---: | :---: | :---: | :---: |
 Day 1 | :heavy_check_mark: | :heavy_check_mark: | | | | |
 Day 2 | :heavy_check_mark: | :heavy_check_mark: | | | | |
